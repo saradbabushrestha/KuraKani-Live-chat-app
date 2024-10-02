@@ -48,7 +48,6 @@ const Login = () => {
 
 export default Login;
 
-//Starter code for this file
 // import React from "react";
 
 // const Login = () => {
