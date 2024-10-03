@@ -10,13 +10,21 @@ const useGetConversations = () => {
       setLoading(true);
       try {
         const res = await fetch("/api/users");
-        const data = await res.json();
-        if (data.error) {
-          throw new Error(data.error);
+
+        if (!res.ok) {
+          throw new Error(`Error: ${res.status} ${res.statusText}`);
         }
-        setConversations(data);
+
+        const data = await res.json();
+
+        if (!data || data.error) {
+          throw new Error(data?.error || "Unexpected response from the server");
+        }
+
+        setConversations(data); // Assuming `data` is an array of conversations
       } catch (error) {
-        toast.error(error.message);
+        console.error("Error fetching conversations:", error);
+        toast.error(`Failed to load conversations: ${error.message}`);
       } finally {
         setLoading(false);
       }
@@ -27,4 +35,5 @@ const useGetConversations = () => {
 
   return { loading, conversations };
 };
+
 export default useGetConversations;
